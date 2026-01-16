@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 
 import { Pool } from '@neondatabase/serverless';
-var pool = new Pool({ connectionString: process.env.DATABASE_URL });
+var pool = new Pool( { connectionString: process.env.DATABASE_URL } );
 
 async function existingEmailCheck(email) {
     const result = await pool.query('SELECT email FROM users WHERE email = $1', [email]);
@@ -17,7 +17,7 @@ async function existingUsernameCheck(username) {
     else return false;
 }
 
-export default async function registryHandler(req, res) {
+export default async function registrationHandler (req, res) {
     const headers = { "Content-Type": "application/json" };
 
     if (req.method !== 'POST') {
@@ -29,8 +29,8 @@ export default async function registryHandler(req, res) {
         const password = reqBody?.password;
         const fullName = reqBody?.fullName;
         const type = reqBody?.type;
-
-        if (!username || !email || !password || !fullName || !type) {
+        
+       if (!username || !email || !password || !fullName || !type) {
             return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400, headers: headers });
         } else {
             const existingEmail = await existingEmailCheck(email);
@@ -39,9 +39,9 @@ export default async function registryHandler(req, res) {
             if (existingEmail && existingUsername) {
                 return new Response(JSON.stringify({ error: "User with this email and username already exists" }), { status: 409, headers: headers });
             }
-
+            
             else if (existingUsername) {
-                return new Response(JSON.stringify({ error: "User with this username already exists" }), { status: 409, headers: headers });
+                return new Response(JSON.stringify({ error: "User with this username already exists" }), { status: 409,  headers: headers});
             }
 
             else if (existingEmail) {
