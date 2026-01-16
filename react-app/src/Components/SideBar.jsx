@@ -6,7 +6,7 @@ import IncomingRequestsCard from "./IncomingRequestsCard";
 import FriendCardComponent from "./FriendCardComponent";
 import { useState } from "react";
 
-export default function Sidebar({ options, activeTab, setActiveTab, incomingRequests, friends, handleSearchNewFriend, searchData, addFriend, loading, currentUserId, handleAccept }) {
+export default function SideBar({ options, activeTab, setActiveTab, incomingRequests, friends, handleSearchNewFriend, searchData, addFriend, loading, currentUserId, handleAccept }) {
     return (
         <Flex direction="column" style={{ height: "100%" }}>
             <Box style={{ flex: 1, overflow: "hidden" }} m='5'>

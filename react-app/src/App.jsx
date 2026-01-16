@@ -17,7 +17,6 @@ function App() {
     if (storedUserData) {
       setUserData(storedUserData);
     } else {
-      setUserData({ isLoggedIn: false });
       navigate('/login')
     }
   }, []);
@@ -25,7 +24,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/' element={<ChatPage loading={loading} setLoading={setLoading}  toastData={toastData} setToastData={setToastData} />} />
+        <Route path='/' element={<ChatsPage loading={loading} setLoading={setLoading} userData={userData} toastData={toastData} setToastData={setToastData} setUserData={setUserData} />} />
         {!userData.isLoggedIn && <Route path='/register' element={<RegistryPage loading={loading} setLoading={setLoading} toastData={toastData} setToastData={setToastData} />} />}
         {!userData.isLoggedIn && <Route path='/login' element={<LoginPage loading={loading} setLoading={setLoading} toastData={toastData} setToastData={setToastData} userData={userData} setUserData={setUserData} />} />}
       </Routes>

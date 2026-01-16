@@ -15,12 +15,71 @@ export default function ChatPage({ loading, setLoading, userData, toastData, set
     const [searchData, setSearchData] = useState([]);
     const [chat, setChat] = useState([]);
     const [incomingRequests, setIncomingRequests] = useState([]);
+    const [friends, setFriends] = useState([])
 
     useEffect(() => {
         if (activeTab === 'friends') {
             handleLoadIncomingRequests();
+            handleLoadFriend();
         }
     }, [activeTab]);
+
+    const handleLoadFriend = () => {
+        setLoading(true);
+
+        fetch(`/api/get_friends?userId=${userData.id}`)
+            .then(async (resJSON) => {
+                const res = await resJSON.json();
+                setFriends(res);
+            })
+            .catch((err) => {
+                console.warn(err);
+                setToastData({ open: true, title: 'Sikertelen lekérdezés', description: 'Az adatok lekérése során hiba történt, kérjük próbálja meg újra.', isError: true });
+            })
+            .finally(() => setLoading(false));
+    }
+
+    const handleAccept = (request) => {
+
+        setIncomingRequests((prev) => (
+            prev.filter(r => r.relationship_id !== request.relationship_id)
+        ));
+
+        setFriends((prev) => [
+            ...prev,
+            {
+                user_id: request.user_id,
+                username: request.username,
+                full_name: request.full_name
+            }
+        ]);
+
+        fetch('/api/accept_request', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                relationshipId: request.relationship_id,
+                userId: userData.id
+            })
+        })
+            .then(async (resJSON) => {
+                const res = await resJSON.json();
+                console.log(res)
+            })
+            .catch((err) => {
+                console.warn(err);
+                setIncomingRequests((prev) => {
+                    const exists = prev.some(r => r.relationship_id === request.relationship_id);
+                    return exists ? prev : [request, ...prev]
+                });
+
+                setFriends((prev) => {
+                    const exists = prev.some(f => f.user_id === request.user_id);
+                    return exists ? prev : [...prev, { user_id: request.user_id, username: request.username, full_name: full_name }]
+                });
+                setToastData({ open: true, title: 'Sikertelen elfogadás', description: 'A kérelem elfogadása során hiba történt, kérjük próbálja újra, vagy frissítse az oldalt.', isError: true });
+            })
+    }
 
     const handleLoadIncomingRequests = () => {
         setLoading(true);
@@ -115,6 +174,8 @@ export default function ChatPage({ loading, setLoading, userData, toastData, set
                 addFriend={handleAddFriend}
                 currentUserId={userData.id}
                 incomingRequests={incomingRequests}
+                handleAccept={handleAccept}
+                friends={friends}
             />
             <ChatComponent chat={chat} />
 

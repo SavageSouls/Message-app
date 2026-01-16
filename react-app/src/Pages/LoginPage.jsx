@@ -3,7 +3,7 @@ import { Container, Box, Card, TextField, Text, Avatar, Flex, Button, Spinner } 
 import { useNavigate } from "react-router-dom";
 import PasswordInput from "../Components/PasswordInput";
 
-export default function LoginPage({ loading, setLoading, toastData, setToastData }) {
+export default function LoginPage( { loading, setLoading, toastData, setToastData, setUserData } ) {
     const [inpudData, setInputData] = useState({
         emailOrusername: "",
         password: ""
@@ -25,10 +25,10 @@ export default function LoginPage({ loading, setLoading, toastData, setToastData
             .then(async (resJSON) => {
                 const res = await resJSON.json();
                 if (resJSON.status === 200) {
+                    setUserData(res.user);
                     setToastData({ open: true, title: 'Sikeres bejelentkezés', description: 'Bejelentkeztél sikeresen fiókodba.', isError: false });
                     navigate('/')
-                    localStorage.setItem('userData', JSON.stringify({ ...res.user, isLoggedIn: true }));
-                } else if (resJSON.status === 401) {
+                    } else if (resJSON.status === 401) {
                     setToastData({ open: true, title: 'Hibás adatok', description: 'Helytelen adatok.', isError: true });
                 } else {
                     setToastData({ open: true, title: 'Hiba történt', description: 'Hiba történt a bejelentkezés során. Később próbáld újra.', isError: true });
