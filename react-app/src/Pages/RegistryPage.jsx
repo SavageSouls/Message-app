@@ -1,18 +1,21 @@
 import { useState } from "react";
 import { Container, Box, Card, TextField, Text, Avatar, Flex, Button, Spinner } from "@radix-ui/themes";
-
+import { useNavigate } from "react-router-dom";
 import PasswordInput from "../Components/PasswordInput";
 
-export default function LoginPage() {
-    const [loading, setLoading] = useState(false);
+export default function RegistryPage({ loading, setLoading, setToastData, toastData }) {
+    let navigate = useNavigate();
     const [inpudData, setInputData] = useState({
         email: "",
         username: "",
         password: "",
         confirmPassword: "",
-        fullName: ""
+        fullName: "",
+        type: "user"
     });
     const [validEmail, setValidEmail] = useState(true);
+    const [existingEmail, setExistingEmail] = useState(false);
+    const [existingUsername, setExistingUsername] = useState(false);
 
     const isValidEmail = (email) => {
         if (!email) return false;
@@ -33,8 +36,42 @@ export default function LoginPage() {
 
     const handleRegistry = (e) => {
         e.preventDefault();
-        // TODO
-        console.log("Registration attempt with:", inpudData);
+        setLoading(true);
+
+        setExistingEmail(false);
+        setExistingUsername(false);
+
+        fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({...inpudData})
+        })
+            .then(async (resJSON) => {
+
+                const res = await resJSON.json();
+
+                if (resJSON.status === 201) {
+                    setToastData({ ...toastData, open: true, title: 'Sikeres regisztráció!', description: 'Most már bejelentkezhetsz a fiókodba.', isError: false });
+                    navigate('/login');
+                } else if (resJSON.status === 409) {
+
+                    if (res.error.includes('email and username')) {
+                        setExistingEmail(true);
+                        setExistingUsername(true);
+                    } else if (res.error.includes('username')) {
+                        setExistingUsername(true);
+                    } else if (res.error.includes('email')) {
+                        setExistingEmail(true);
+                    }
+                } else {
+                    setToastData({ ...toastData, open: true, title: 'Hiba történt!', description: 'Hiba történt a regisztráció során, kérjük próbáld meg újra.', isError: true });
+                }
+            })
+            .catch(console.warn)
+
+            .finally(() => {
+                setLoading(false);
+            });
     }
 
     return (
@@ -96,7 +133,7 @@ export default function LoginPage() {
                     >
                         Hozz létre egy fiókot!
                     </Text>
-                    <Text as="label" htmlFor="usernameInput" mx='1'>
+                    <Text as="label" htmlFor="userNameI" mx='1'>
                         Email
                     </Text>
                     <TextField.Root
@@ -136,6 +173,23 @@ export default function LoginPage() {
                         </Text>
                     }
 
+                    {
+                        existingEmail &&
+                        <Text
+                            as="p"
+                            size='2'
+                            mx='1'
+                            style={{
+                                userSelect: 'none',
+                                cursor: 'default'
+                            }}
+                            align="center"
+                            color="blue"
+                        >
+                            Már létezik felhasználó ezzel az email címmel!
+                        </Text>
+                    }
+
                     <Text as="label" htmlFor="userNameI" mx='1'>
                         Felhasználónév
                     </Text>
@@ -156,6 +210,23 @@ export default function LoginPage() {
                             else setInputData({ ...inpudData, username: e.target.value })
                         }}
                     />
+
+                    {
+                        existingUsername &&
+                        <Text
+                            as="p"
+                            size='2'
+                            mx='1'
+                            style={{
+                                userSelect: 'none',
+                                cursor: 'default'
+                            }}
+                            align="center"
+                            color="blue"
+                        >
+                            A felhasználónév már foglalt!
+                        </Text>
+                    }
 
                     <Text as="label" htmlFor="fullNameI" mx='1'>
                         Teljes Név
@@ -281,7 +352,7 @@ export default function LoginPage() {
                                         cursor: 'pointer'
                                     }}
                                     color="magenta"
-                                    onClick={(e) => handleRegistration(e)}
+                                    onClick={(e) => handleRegistry(e)}
                                 >
                                     Regisztráció
                                 </Button>

@@ -17,7 +17,7 @@ async function existingUsernameCheck(username) {
     else return false;
 }
 
-export default async function registrationHandler (req, res) {
+export default async function registryHandler (req, res) {
     if (req.method !== 'POST') {
         return new Response(JSON.stringify({ error: "Method Not Allowed" }), { status: 405 });
     } else {

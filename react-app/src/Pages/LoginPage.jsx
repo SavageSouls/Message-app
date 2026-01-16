@@ -3,7 +3,7 @@ import { Container, Box, Card, TextField, Text, Avatar, Flex, Button, Spinner } 
 import { useNavigate } from "react-router-dom";
 import PasswordInput from "../Components/PasswordInput";
 
-export default function LoginPage() {
+export default function LoginPage( { loading, setLoading, toastData, setToastData } ) {
     const [loading, setLoading] = useState(false);
     const [inpudData, setInputData] = useState({
         emailOrusername: "",
@@ -14,8 +14,30 @@ export default function LoginPage() {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        // TODO
-        console.log("Login attempt with:", inpudData);
+        setLoading(true);
+
+        fetch('/.netlify/functions/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({...inpudData})
+        })
+            .then(async (resJSON) => {
+                const res = await resJSON.json();
+                if (resJSON.status === 200) {
+                    setToastData( { open: true, title: 'Sikeres bejelentkezés', description: 'Sikeresen bejelentkezett a fiókjába.', isError: false } );
+                    localStorage.setItem('userData', JSON.stringify({  ...res.user, isLoggedIn: true }));
+                } else if (resJSON.status === 401) {
+                    setToastData( { open: true, title: 'Hibás adatok', description: 'Helytelen bejelentkezési adatok.', isError: true } );
+                } else {
+                    setToastData( { open: true, title: 'Hiba történt', description: 'Hiba történt a bejelentkezés során. Próbálja újra később.', isError: true } );
+                }
+            })
+            .catch(console.warn)
+            .finally(() => {
+                setLoading(false);
+            });
     }
 
     return (

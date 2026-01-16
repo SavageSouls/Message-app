@@ -1,4 +1,4 @@
-export default function SideBarComp() {
+export default function SideBar() {
     return (
         <>
         </>
