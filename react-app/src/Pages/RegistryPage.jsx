@@ -41,7 +41,7 @@ export default function RegistryPage({ loading, setLoading, setToastData, toastD
         setExistingEmail(false);
         setExistingUsername(false);
 
-        fetch('/api/register', {
+        fetch('/.netlify/functions/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...inpudData })

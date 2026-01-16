@@ -2,7 +2,7 @@ import { Card, Avatar, Box, Text, Flex, Button } from "@radix-ui/themes";
 import { PlusIcon } from "@radix-ui/react-icons";
 
 export default function SearchCard( { user, currentUserId, addFriend } ) {
-
+    
     return (
         <Card>
             <Flex gap="3" align="center" direction="row" justify='between'>

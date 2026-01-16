@@ -3,7 +3,7 @@ import SideBar from "../Components/SideBar";
 import ChatComponent from "../Components/ChatComponent";
 import { useState, useEffect } from "react";
 
-export default function ChatsPage( { loading, setLoading, userData } ) {
+export default function ChatPage( { loading, setLoading, userData, toastData, setToastData  } ) {
   const [tabsOptions, setTabsOptions] = useState(
     {
       chats: 'Csevegések',
@@ -18,7 +18,6 @@ export default function ChatsPage( { loading, setLoading, userData } ) {
   const handleSearchNewFriend = (searchText) => {
     
     if (searchText.length !== 0) {
-      
       setLoading(true)
 
       fetch(`/api/search?q=${encodeURIComponent(searchText.trim())}&userId=${userData.id}`)
@@ -33,7 +32,7 @@ export default function ChatsPage( { loading, setLoading, userData } ) {
     }
   }
 
-  const handleAddFriend = async (user) => {
+  const handleAddFriend = (user) => {
     setCardsData( (prev) => (
       prev.map( (u) => (
         u.user_id === user.user_id
@@ -43,6 +42,38 @@ export default function ChatsPage( { loading, setLoading, userData } ) {
             u
       ))
     ));
+
+    fetch('/api/add_friend', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        requesterId: userData.id,
+        addresseeId: user.user_id
+      })
+    })
+      .then( async (resJSON) => {
+        const res = await resJSON.json();
+        console.log(res)
+      })
+      .catch( (err) => {
+        setCardsData( prev => (
+          prev.map(u => (
+            u.user_id === user.user_id
+              ?
+                {
+                  ...u,
+                  accepted: null,
+                  requester_id: null,
+                  addressee_id: null
+                }
+              :
+                u
+          ))
+        ))
+
+        setToastData( { open: true, title: 'Sikertelen felvétel', description: 'A kérelem küldése során hiba lépett fel, kérjük próbálja újra, vagy ellenőrizze az ismerősök listáját.', isError: true } );
+
+      });
   }
 
   return (
