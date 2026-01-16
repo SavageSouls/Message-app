@@ -1,9 +1,11 @@
-import { Box, Card, Flex, Tabs, Text, ScrollArea, Heading, Avatar, TextField } from "@radix-ui/themes";
+import { Box, Card, Flex, Tabs, Text, ScrollArea, Heading, Avatar, TextField, Spinner } from "@radix-ui/themes";
 import TabsComponent from "./TabsComponent";
-import SearchNewFriendComponent from "./SearchNewFriendComponent";
+import SearchNewFriendComponent from "./SearchNewFriend";
+import ChatCardComponent from "./ChatCard";
 import { useState } from "react";
 
-export default function SideBar({ options, activeTab, setActiveTab, handleSearchNewFriend }) {
+export default function SideBar({ options, activeTab, setActiveTab, handleSearchNewFriend, cardsData, addFriend, loading, currentUserId  }) {
+
     return (
         <Flex direction="column" style={{ height: "100%" }}>
             <Box style={{ flex: 1, overflow: "hidden" }} m='5'>
@@ -20,7 +22,7 @@ export default function SideBar({ options, activeTab, setActiveTab, handleSearch
                                 title="Message Icon"
                                 alt="Message Icon"
                             />
-                            <Heading as="h1" ml='1'>Sublight</Heading>
+                            <Heading as="h1" ml='1'>Messaj</Heading>
                         </Flex>
 
                         <TabsComponent options={options} activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -47,13 +49,30 @@ export default function SideBar({ options, activeTab, setActiveTab, handleSearch
                             </Box>
                         }
 
-                        {
-                            activeTab === 'search' &&
+                         {
+                             activeTab === 'search' &&
                             <Box style={{ flex: 1, overflow: "hidden" }}>
                                 <ScrollArea type="auto" scrollbars="vertical" style={{ height: "100%", userSelect: 'none', cursor: 'default' }}>
-                                    <Box pt="2" style={{ userSelect: 'none', cursor: 'default' }}>
-                                        <SearchNewFriendComponent handleSearchNewFriend={handleSearchNewFriend} />
+                                    <Box pt="2" style={{ userSelect: 'none', cursor: 'default' }} mb='2'>
+                                       <SearchNewFriendComponent handleSearchNewFriend={handleSearchNewFriend} />
                                     </Box>
+
+                                    {
+                                        loading &&
+                                        <Flex direction='column' justify='center' align='center' style={{ height: '90%' }}>
+                                            <Spinner size='3' />
+                                        </Flex>
+                                    }
+
+                                    {
+                                        cardsData.length > 0
+                                        &&
+                                        <Flex direction='column'>
+                                            {
+                                                cardsData.map( (user, idx) => <ChatCardComponent key={idx} user={user} addFriend={addFriend} currentUserId={currentUserId} /> )
+                                            }
+                                        </Flex>
+                                    }
                                 </ScrollArea>
                             </Box>
                         }
@@ -61,6 +80,6 @@ export default function SideBar({ options, activeTab, setActiveTab, handleSearch
                     </Flex>
                 </Card>
             </Box>
-        </Flex >
+        </Flex>
     );
 }
