@@ -2,10 +2,10 @@ import { Box, Card, Flex, Tabs, Text, ScrollArea, Heading, Avatar, TextField, Sp
 import TabsComponent from "./TabsComponent";
 import SearchNewFriend from "./SearchNewFriend";
 import SearchCard from "./SearchCard";
+import IncomingRequestsCard from "./IncomingRequestsCard";
 import { useState } from "react";
 
-export default function SideBar({ options, activeTab, setActiveTab, handleSearchNewFriend, cardsData, addFriend, loading, currentUserId  }) {
-
+export default function Sidebar({ options, activeTab, setActiveTab, incomingRequests, handleSearchNewFriend, searchData, addFriend, loading, currentUserId }) {
     return (
         <Flex direction="column" style={{ height: "100%" }}>
             <Box style={{ flex: 1, overflow: "hidden" }} m='5'>
