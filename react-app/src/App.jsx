@@ -3,7 +3,7 @@ import './App.css';
 import LoginPage from './Pages/LoginPage';
 import RegistryPage from './Pages/RegistryPage';
 import ToastApp from './Components/Toast';
-import ChatPage from './Pages/ChatsPage';
+import ChatPage from './Pages/ChatPage';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
 function App() {
