@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Container, Box, Card, TextField, Text, Avatar, Flex, Button, Spinner } from "@radix-ui/themes";
-
+import { useNavigate } from "react-router-dom";
 import PasswordInput from "../Components/PasswordInput";
 
 export default function LoginPage() {
@@ -10,6 +10,8 @@ export default function LoginPage() {
         password: ""
     });
     
+    let navigate = useNavigate();
+
     const handleLogin = (e) => {
         e.preventDefault();
         // TODO
@@ -76,8 +78,6 @@ export default function LoginPage() {
                         Jelentkezz be a fiókodba!
                     </Text>
 
-                    <Text as="label" htmlFor="emailOrusername" mx='1'>
-                    </Text>
                     <TextField.Root
                         radius="full"
                         placeholder="Email/Felhasználónév"
@@ -114,7 +114,7 @@ export default function LoginPage() {
                     />
 
                     {
-                        inpudData.emailOrUsername && inpudData.password && inpudData.password.length >= 10
+                        inpudData.emailOrusername.length > 0 && inpudData.password.length >= 6
                             ?
                             loading
                                 ?
@@ -192,7 +192,7 @@ export default function LoginPage() {
                         size="4"
                         align="center"
                     >
-                        Itt regisztrálhat, ha nincs aktív fiókja:
+                        Itt regisztrálhatsz, ha nincs aktív fiókod:
                     </Text>
 
 
@@ -207,6 +207,9 @@ export default function LoginPage() {
                         style={{
                             userSelect: 'none',
                             cursor: 'pointer'
+                        }}
+                        onClick={() => {
+                            navigate('/register');
                         }}
                     >
                         Regisztráció
