@@ -1,4 +1,4 @@
-/*import { Pool } from '@neondatabase/serverless';
+import { Pool } from '@neondatabase/serverless';
 var pool = new Pool( { connectionString: process.env.DATABASE_URL } );
 
 export async function handler() {
@@ -7,4 +7,3 @@ export async function handler() {
     body: JSON.stringify({ ok: true }),
   };
 }
-*/
