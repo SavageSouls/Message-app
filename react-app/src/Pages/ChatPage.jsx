@@ -1,34 +1,38 @@
-import { Box, Flex, Card, Text, Button, ScrollArea } from "@radix-ui/themes";
+import { Flex } from "@radix-ui/themes";
 import Sidebar from "../Components/SideBar";
+import ChatComponent from "../Components/ChatComponent";
+import { useState, useEffect } from "react";
 
-export default function ChatPage() {
+export default function ChatsPage( { loading, setLoading, userData } ) {
+  const [tabsOptions, setTabsOptions] = useState(
+    {
+      chats: 'Csevegések',
+      friends: 'Ismerősök',
+      search: 'Keresés'
+    }
+  );
+  const [activeTab, setActiveTab] = useState("chats");
+  const [cardsData, setCardsData] = useState([]);
+  const [chat, setChat] = useState([]);
+
+  const handleSearchNewFriend = (searchText) => {
+    
+    if (searchText.length !== 0) {
+      fetch(`/api/search?q=${encodeURIComponent(searchText.trim())}&userId=${userData.id}`)
+        .then( async (res) => {
+          const result = await res.json();
+          console.log(result)
+        })
+        .catch(console.warn)
+    }
+  }
 
   return (
     <Flex direction="row" height="100vh" width="100vw" justify="space-between" align="center">
 
-      <Flex direction="column" style={{ height: "100%" }}>
-        <Box style={{ flex: 1, overflow: "hidden" }} m='5'>
-          <Sidebar />
-        </Box>
-      </Flex>
-
-      <Flex direction="column" style={{ height: "100%", width: '100%' }}>
-        <Box style={{ flex: 1, overflow: "hidden" }} m='5'>
-          <Card style={{ height: "100%"}}>
-            <ScrollArea type="auto" scrollbars="vertical" style={{ height: "100%" }}>
-
-
-              <Flex p="4"
-                justify='center'
-                direction='column'
-                style={{height: '100%', textAlign: 'center'}}
-              >
-                Válasszon egy csevegést a bal oldali sávból, vagy kezdj egy újat!
-              </Flex>
-            </ScrollArea>
-          </Card>
-        </Box>
-      </Flex>
+      <Sidebar options={tabsOptions} activeTab={activeTab} setActiveTab={setActiveTab} handleSearchNewFriend={handleSearchNewFriend} />
+      <ChatComponent chat={chat} />
+      
     </Flex>
   )
 }
