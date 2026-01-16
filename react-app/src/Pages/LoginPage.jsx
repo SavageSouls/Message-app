@@ -3,7 +3,7 @@ import { Container, Box, Card, TextField, Text, Avatar, Flex, Button, Spinner } 
 import { useNavigate } from "react-router-dom";
 import PasswordInput from "../Components/PasswordInput";
 
-export default function LoginPage( { loading, setLoading, toastData, setToastData } ) {
+export default function LoginPage({ loading, setLoading, toastData, setToastData }) {
     const [inpudData, setInputData] = useState({
         emailOrusername: "",
         password: ""
@@ -20,17 +20,17 @@ export default function LoginPage( { loading, setLoading, toastData, setToastDat
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({...inpudData})
+            body: JSON.stringify({ ...inpudData })
         })
             .then(async (resJSON) => {
                 const res = await resJSON.json();
                 if (resJSON.status === 200) {
-                    setToastData( { open: true, title: 'Sikeres bejelentkezés', description: 'Sikeresen bejelentkezett a fiókjába.', isError: false } );
-                    localStorage.setItem('userData', JSON.stringify({  ...res.user, isLoggedIn: true }));
+                    setToastData({ open: true, title: 'Sikeres bejelentkezés', description: 'Bejelentkeztél sikeresen fiókodba.', isError: false });
+                    localStorage.setItem('userData', JSON.stringify({ ...res.user, isLoggedIn: true }));
                 } else if (resJSON.status === 401) {
-                    setToastData( { open: true, title: 'Hibás adatok', description: 'Helytelen bejelentkezési adatok.', isError: true } );
+                    setToastData({ open: true, title: 'Hibás adatok', description: 'Helytelen adatok.', isError: true });
                 } else {
-                    setToastData( { open: true, title: 'Hiba történt', description: 'Hiba történt a bejelentkezés során. Próbálja újra később.', isError: true } );
+                    setToastData({ open: true, title: 'Hiba történt', description: 'Hiba történt a bejelentkezés során. Később próbáld újra.', isError: true });
                 }
             })
             .catch(console.warn)
@@ -40,7 +40,7 @@ export default function LoginPage( { loading, setLoading, toastData, setToastDat
     }
 
     return (
-        <Container size="2" style={{padding: '0 10px'}}>
+        <Container size="2" style={{ padding: '0 10px' }}>
             <Flex
                 align="center"
                 justify="center"
@@ -102,7 +102,7 @@ export default function LoginPage( { loading, setLoading, toastData, setToastDat
                     <TextField.Root
                         radius="full"
                         placeholder="Email/Felhasználónév"
-                        size="3" 
+                        size="3"
                         name="emailOrusername"
                         id="emailOrusername"
                         mt="2"
@@ -141,7 +141,7 @@ export default function LoginPage( { loading, setLoading, toastData, setToastDat
                             loading
                                 ?
                                 <Button
-                                    style={{width: '100%'}}
+                                    style={{ width: '100%' }}
                                     variant="outline"
                                     mt="4"
                                     mb="3"
@@ -173,7 +173,7 @@ export default function LoginPage( { loading, setLoading, toastData, setToastDat
                                 </Button>
                             :
                             <Button
-                                style={{width: '100%'}}
+                                style={{ width: '100%' }}
                                 variant="outline"
                                 mt="4"
                                 mb="3"
@@ -216,7 +216,6 @@ export default function LoginPage( { loading, setLoading, toastData, setToastDat
                     >
                         Itt regisztrálhatsz, ha nincs aktív fiókod:
                     </Text>
-
 
                     <Button
                         variant="outline"

@@ -1,7 +1,7 @@
 import { Box, Flex, Card, Text, Button, ScrollArea } from "@radix-ui/themes";
 import Sidebar from "../Components/SideBar";
 
-export default function ChatsPage() {
+export default function ChatPage() {
 
   return (
     <Flex direction="row" height="100vh" width="100vw" justify="space-between" align="center">

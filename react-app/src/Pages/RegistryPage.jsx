@@ -44,7 +44,7 @@ export default function RegistryPage({ loading, setLoading, setToastData, toastD
         fetch('/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({...inpudData})
+            body: JSON.stringify({ ...inpudData })
         })
             .then(async (resJSON) => {
 
@@ -367,7 +367,7 @@ export default function RegistryPage({ loading, setLoading, setToastData, toastD
                                 disabled
                                 color="magenta"
                             >
-                                Bejelentkezés
+                                Regisztráció
                             </Button>
                     }
 
@@ -418,7 +418,6 @@ export default function RegistryPage({ loading, setLoading, setToastData, toastD
                     >
                         Bejelenkezés
                     </Button>
-
 
                 </Card>
             </Flex>
