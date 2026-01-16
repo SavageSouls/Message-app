@@ -1,6 +1,6 @@
 import { Card, Avatar, Box, Text, Flex, Button } from "@radix-ui/themes";
 
-export default function IncomingRequestsCard ( { request, handleAccept } ) {
+export default function FriendCard( { friend } ) {
     
     return (
         <Card mb="2" style={{ userSelect: 'none' }}>
@@ -8,16 +8,16 @@ export default function IncomingRequestsCard ( { request, handleAccept } ) {
                 <Avatar
                     size="3"
                     radius="large"
-                    fallback={`${request.full_name.charAt(0)}${request.full_name.split(' ')[1].charAt(0)}`}
+                    fallback={`${friend.full_name.charAt(0)}${friend.full_name.split(' ')[1].charAt(0)}`}
                     variant='solid'
                     color='tomato'
                 />
                 <Box>
                     <Text as="div" size="2" weight="bold">
-                        {request.full_name}
+                        {friend.full_name}
                     </Text>
                     <Text as="div" size="2" color="gray">
-                        {request.username}
+                        {friend.username}
                     </Text>
 
                 </Box>
@@ -25,9 +25,9 @@ export default function IncomingRequestsCard ( { request, handleAccept } ) {
                     <Button 
                         radius='full'
                         style={{ cursor: 'pointer', background: 'linear-gradient(45deg, #B55586, #EF652C)' }}
-                        onClick={() => handleAccept(request)}
+
                     >
-                        Elfogadás
+                        Üzenet
                     </Button> 
                 </Box>
             </Flex>

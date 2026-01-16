@@ -3,9 +3,10 @@ import TabsComponent from "./TabsComponent";
 import SearchNewFriend from "./SearchNewFriend";
 import SearchCard from "./SearchCard";
 import IncomingRequestsCard from "./IncomingRequestsCard";
+import FriendCardComponent from "./FriendCardComponent";
 import { useState } from "react";
 
-export default function Sidebar({ options, activeTab, setActiveTab, incomingRequests, handleSearchNewFriend, searchData, addFriend, loading, currentUserId }) {
+export default function Sidebar({ options, activeTab, setActiveTab, incomingRequests, friends, handleSearchNewFriend, searchData, addFriend, loading, currentUserId, handleAccept }) {
     return (
         <Flex direction="column" style={{ height: "100%" }}>
             <Box style={{ flex: 1, overflow: "hidden" }} m='5'>
@@ -41,20 +42,54 @@ export default function Sidebar({ options, activeTab, setActiveTab, incomingRequ
                         {
                             activeTab === 'friends' &&
                             <Box style={{ flex: 1, overflow: "hidden" }}>
-                                <ScrollArea type="auto" scrollbars="vertical" style={{ height: "100%" }}>
-                                    <Box pt="2">
-                                        Ismerősök
-                                    </Box>
+                                <ScrollArea type="auto" scrollbars="vertical" radius='full' style={{ height: "100%", paddingRight: '15px' }}>
+                                    {
+                                        loading
+                                            ?
+                                            <Flex direction='column' justify='center' align='center' style={{ height: '90%' }}>
+                                                <Spinner size='3' />
+                                            </Flex>
+                                            :
+                                            <Flex direction='column'>
+                                                {
+                                                    (incomingRequests.length > 0) &&
+                                                    <>
+                                                        <Text as="p" style={{ opacity: '0.6', userSelect: 'none', cursor: 'default' }} mb='2'>
+                                                            Beérkező kérelmek
+                                                        </Text>
+
+                                                        {
+                                                            incomingRequests.map((request, idx) => (<IncomingRequestsCard key={idx} request={request} handleAccept={handleAccept} />))
+                                                        }
+                                                    </>
+                                                }
+
+                                                {
+                                                    (friends.length > 0) &&
+                                                    <>
+                                                        <Text as="p" style={{ opacity: '0.6', userSelect: 'none', cursor: 'default' }} mb='2'>
+                                                            Ismerősök
+                                                        </Text>
+
+                                                        {
+                                                            friends.map((friend, idx) => (<FriendCardComponent key={idx} friend={friend} />))
+                                                        }
+                                                    </>
+                                                }
+
+                                            </Flex>
+                                    }
+
                                 </ScrollArea>
                             </Box>
                         }
 
-                         {
-                             activeTab === 'search' &&
+                        {
+                            activeTab === 'search' &&
                             <Box style={{ flex: 1, overflow: "hidden" }}>
                                 <ScrollArea type="auto" scrollbars="vertical" style={{ height: "100%", userSelect: 'none', cursor: 'default' }}>
                                     <Box pt="2" style={{ userSelect: 'none', cursor: 'default' }} mb='2'>
-                                       <SearchNewFriend handleSearchNewFriend={handleSearchNewFriend} />
+                                        <SearchNewFriend handleSearchNewFriend={handleSearchNewFriend} />
                                     </Box>
 
                                     {
@@ -69,7 +104,7 @@ export default function Sidebar({ options, activeTab, setActiveTab, incomingRequ
                                         &&
                                         <Flex direction='column'>
                                             {
-                                                 cardsData.map( (user, idx) => <SearchCard key={idx} user={user} addFriend={addFriend} currentUserId={currentUserId} /> )
+                                                cardsData.map((user, idx) => <SearchCard key={idx} user={user} addFriend={addFriend} currentUserId={currentUserId} />)
                                             }
                                         </Flex>
                                     }
