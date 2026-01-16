@@ -52,7 +52,7 @@ export default function RegistryPage({ loading, setLoading, setToastData, toastD
 
                 if (resJSON.status === 201) {
                     setToastData({ ...toastData, open: true, title: 'Sikeres regisztráció!', description: 'Most már bejelentkezhetsz a fiókodba.', isError: false });
-                    navigate('/login');
+                    navigate('/');
                 } else if (resJSON.status === 409) {
 
                     if (res.error.includes('email and username')) {

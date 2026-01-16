@@ -4,12 +4,11 @@ import { useNavigate } from "react-router-dom";
 import PasswordInput from "../Components/PasswordInput";
 
 export default function LoginPage( { loading, setLoading, toastData, setToastData } ) {
-    const [loading, setLoading] = useState(false);
     const [inpudData, setInputData] = useState({
         emailOrusername: "",
         password: ""
     });
-    
+
     let navigate = useNavigate();
 
     const handleLogin = (e) => {
@@ -103,7 +102,8 @@ export default function LoginPage( { loading, setLoading, toastData, setToastDat
                     <TextField.Root
                         radius="full"
                         placeholder="Email/Felhasználónév"
-                        size="3" name="emailOrusername"
+                        size="3" 
+                        name="emailOrusername"
                         id="emailOrusername"
                         mt="2"
                         mb="1"
