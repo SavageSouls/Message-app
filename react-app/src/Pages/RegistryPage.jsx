@@ -48,7 +48,9 @@ export default function RegistryPage({ loading, setLoading, setToastData, toastD
         })
             .then(async (resJSON) => {
 
-                const res = await resJSON.json();
+                const text = await resJSON.text();
+                console.log("STATUS:", resJSON.status);
+                console.log("RAW RESPONSE:", text);
 
                 if (resJSON.status === 201) {
                     setToastData({ ...toastData, open: true, title: 'Sikeres regisztráció!', description: 'Most már bejelentkezhetsz a fiókodba.', isError: false });

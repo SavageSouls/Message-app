@@ -7,7 +7,7 @@ export default async function incomingRequests (req, res) {
     if (req.method !== 'GET') {
         return new Response(JSON.stringify({ error: "Method Not Allowed" }), { status: 405, headers: headers  });
     } else {
-        const url = new URL(req.utl);
+        const url = new URL(req.url);
         const userId = +url.searchParams.get('userId');
 
         if (!userId) {
@@ -23,7 +23,7 @@ export default async function incomingRequests (req, res) {
                         u.username,
                         u.full_name,
                         r.created_at
-                    FROM relationship r
+                    FROM relationships r
                     JOIN users u ON u.user_id = r.requester_id
                     WHERE r.addressee_id = $1 AND r.accepted = false
                     ORDER BY r.created_at DESC

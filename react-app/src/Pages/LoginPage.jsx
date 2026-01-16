@@ -39,7 +39,6 @@ export default function LoginPage({ loading, setLoading, toastData, setToastData
                 setLoading(false);
             });
     }
-
     return (
         <Container size="2" style={{ padding: '0 10px' }}>
             <Flex
