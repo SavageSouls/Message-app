@@ -4,16 +4,20 @@ import { Container, Box, Card, TextField, Text, Avatar, Flex, Button, Spinner } 
 import PasswordInput from "../Components/PasswordInput";
 
 export default function LoginPage() {
-    const [showPassword, setShowPassword] = useState(false);
-    const [validData, setValidData] = useState(false);
     const [loading, setLoading] = useState(false);
     const [inpudData, setInputData] = useState({
         emailOrusername: "",
         password: ""
     });
     
+    const handleLogin = (e) => {
+        e.preventDefault();
+        // TODO
+        console.log("Login attempt with:", inpudData);
+    }
+
     return (
-        <Container size="2">
+        <Container size="2" style={{padding: '0 10px'}}>
             <Flex
                 align="center"
                 justify="center"
@@ -56,7 +60,7 @@ export default function LoginPage() {
                             cursor: 'default'
                         }}
                     >
-                        Bejelenzkezés
+                        Bejelentkezés
                     </Text>
                     <Text
                         as='p'
@@ -83,7 +87,11 @@ export default function LoginPage() {
                         mb="1"
                         color="blue"
                         value={inpudData.emailOrusername}
-                        onChange={(e) => setInputData({ ...inpudData, emailOrusername: e.target.value })}
+                        onChange={(e) => {
+                            if (e.target.value.includes(' ')) return;
+                            else setInputData({ ...inpudData, emailOrusername: e.target.value })
+                        }}
+                        required
                     />
 
                     <Text
@@ -99,15 +107,19 @@ export default function LoginPage() {
                     <PasswordInput
                         inputName="password"
                         value={inpudData.password}
-                        onChange={(e) => setInputData({ ...inpudData, password: e.target.value })}
+                        onChange={(e) => {
+                            if (e.target.value.includes(' ')) return;
+                            else setInputData({ ...inpudData, password: e.target.value })
+                        }}
                     />
 
                     {
-                        !validData
+                        inpudData.emailOrUsername && inpudData.password && inpudData.password.length >= 10
                             ?
                             loading
                                 ?
                                 <Button
+                                    style={{width: '100%'}}
                                     variant="outline"
                                     mt="4"
                                     mb="3"
@@ -133,19 +145,21 @@ export default function LoginPage() {
                                         cursor: 'pointer'
                                     }}
                                     color="magenta"
+                                    onClick={(e) => handleLogin(e)}
                                 >
                                     Bejelentkezés
                                 </Button>
                             :
                             <Button
+                                style={{width: '100%'}}
                                 variant="outline"
                                 mt="4"
                                 mb="3"
                                 size="3"
                                 radius="full"
-                                className="loginButton"
                                 disabled
-                                color="magenta">
+                                color="magenta"
+                            >
                                 Bejelentkezés
                             </Button>
                     }
@@ -159,7 +173,7 @@ export default function LoginPage() {
                         />
                         <Text
                             size="2"
-                            color="gray"
+                            color="grey"
                             style={{
                                 position: "absolute",
                                 top: "50%",

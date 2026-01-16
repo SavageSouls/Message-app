@@ -20,6 +20,7 @@ export default function PasswordInput( { inputName, value, onChange } ) {
             color="blue"
             value={value}
             onChange={onChange}
+            required
         >
             <TextField.Slot side="right">
                 <IconButton
