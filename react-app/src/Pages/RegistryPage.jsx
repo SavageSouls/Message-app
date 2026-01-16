@@ -332,7 +332,6 @@ export default function RegistryPage({ loading, setLoading, setToastData, toastD
                                     mb="3"
                                     size="3"
                                     radius="full"
-                                    className="loginButton"
                                     disabled
                                     color="magenta"
                                 >
